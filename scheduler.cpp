@@ -10,7 +10,7 @@ using namespace std;
 void Parse(string inputString, vector<string> &tokensVector);
 void showPrompt();
 
-int main(int argc, char *argv[])
+int main()
 {
     string userInput = "";
     vector<string> inputArgs;
@@ -66,7 +66,7 @@ int main(int argc, char *argv[])
         }
         else
         {
-            cout << " Command not recognized, please try again." << endl;
+            cout << "Command not recognized, please try again." << endl;
         }
         
         //Clear all tokens out of vector

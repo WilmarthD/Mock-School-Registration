@@ -14,21 +14,21 @@ CC = g++
 BIN = bin
 OBJ = obj
 
-#all: $(BIN)/$(EXE)
+all: $(BIN)/$(EXE)
 
-#$(BIN)/$(EXE): $(OBJ)/scheduler.o
-#	$(CC) $(FLAGS) $(OBJ)/scheduler.o -o $@
+$(BIN)/$(EXE): $(OBJ)/scheduler.o
+	$(CC) $(FLAGS) $(OBJ)/scheduler.o -o $@
 
-#$(OBJ)/scheduler.o: scheduler.cpp
-#	$(CC) $(FLAGS) -c scheduler.cpp -o $@
+$(OBJ)/scheduler.o: scheduler.cpp
+	$(CC) $(FLAGS) -c scheduler.cpp -o $@
 
-all: scheduler_cp1
+#all: scheduler_cp1
 
-scheduler_cp1: scheduler.o
-	g++ scheduler.o -o scheduler_cp1
+#scheduler_cp1: scheduler.o
+#	g++ scheduler.o -o scheduler_cp1
 
-scheduler.o: scheduler.cpp
-	g++ -c scheduler.cpp
+#scheduler.o: scheduler.cpp
+#	g++ -c scheduler.cpp
 
 tar:	clean
 	tar cvvf $(TARFILE) $(REPODIR)
