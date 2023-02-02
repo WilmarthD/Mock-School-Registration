@@ -16,7 +16,6 @@ int main(int argc, char *argv[])
     vector<string> inputArgs;
 
     //In loop accept commands from user, only stopping with "quit"
-    //cin.getline(userInput);
     showPrompt();
 
     //Loop for each instruction in the line split by spaces
@@ -42,16 +41,11 @@ int main(int argc, char *argv[])
         }
         else if(inputArgs.at(0) == "cancel")
         {
-            cout << "cancel course ";
-            for (int i = 1; i < (int)inputArgs.size(); i++)
-            {
-                cout << inputArgs.at(i) << " ";
-            }
-            cout << endl;
+            cout << "cancel course " << inputArgs.at(1) << endl;
         }
         else if(inputArgs.at(0) == "enroll")//Change output top special tokens
         {
-            cout << "enroll student " << inputArgs.at(1)
+            cout << "enroll student " << inputArgs.at(1) << " (" << inputArgs.at(2) << ") " << inputArgs.at(4) << ", " << inputArgs.at(3) << endl;
         }
         else if(inputArgs.at(0) == "add")
         {
