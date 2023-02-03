@@ -15,16 +15,22 @@ int main()
     string userInput = "";
     vector<string> inputArgs;
 
-    //In loop accept commands from user, only stopping with "quit"
+    //Give user prompt on commands
     showPrompt();
 
     //Loop for each instruction in the line split by spaces
     while(getline(cin, userInput))
     {
-        //Parse iput line into tokens in a vector
+        //Split input into seperate strings
         Parse(userInput, inputArgs);
 
         //If input statments
+        if (inputArgs.empty())
+        {
+            showPrompt();
+            continue;
+        }
+
         if(inputArgs.at(0) == "quit")
         {
             //Exit program
@@ -64,6 +70,10 @@ int main()
         {
             cout << "schedule of student " << inputArgs.at(1) << endl;
         }
+        else if(inputArgs.at(0) == " ")
+        {
+            cout << endl << ": ";
+        }
         else
         {
             cout << "Command not recognized, please try again." << endl;
@@ -71,6 +81,9 @@ int main()
         
         //Clear all tokens out of vector
         inputArgs.clear();
+
+        //Give user prompt on commands
+        showPrompt();
     }
 
     return 0;
@@ -80,7 +93,7 @@ void Parse(string inputString, vector<string> &tokensVector)
 {
     stringstream newString(inputString);
     //vector<string> inputArgs;
-    string token = "";
+    string token;
 
     while(getline(newString, token, ' '))
     {
