@@ -43,7 +43,7 @@ int main()
         {
             cout << "cancel course " << inputArgs.at(1) << endl;
         }
-        else if(inputArgs.at(0) == "enroll")//Change output top special tokens
+        else if(inputArgs.at(0) == "enroll")
         {
             cout << "enroll student " << inputArgs.at(1) << " (" << inputArgs.at(2) << ") " << inputArgs.at(4) << ", " << inputArgs.at(3) << endl;
         }
