@@ -16,13 +16,25 @@ OBJ = obj
 
 all: $(BIN)/$(EXE)
 
-$(BIN)/$(EXE): $(OBJ)/scheduler.o
-	$(CC) $(FLAGS) $(OBJ)/scheduler.o -o $@
+$(BIN)/$(EXE): $(OBJ)/scheduler.o $(OBJ)/StudentList.o $(OBJ)/CourseList.o $(OBJ)/Student.o $(OBJ)/Course.o
+	$(CC) $(FLAGS) $(OBJ)/scheduler.o $(OBJ)/StudentList.o $(OBJ)/CourseList.o $(OBJ)/Student.o $(OBJ)/Course.o -o $@
 
-$(OBJ)/scheduler.o: scheduler.cpp
+$(OBJ)/scheduler.o: scheduler.cpp CourseList.h StudentList.h
 	$(CC) $(FLAGS) -c scheduler.cpp -o $@
 
-#all: scheduler_cp1
+$(OBJ)/StudentList.o: StudentList.cpp Student.h
+	$(CC) $(FLAGS) -c StudentList.cpp -o $@
+
+$(OBJ)/CourseList.o: CourseList.cpp Course.h
+	$(CC) $(FLAGS) -c CourseList.cpp -o $@
+
+$(OBJ)/Student.o: Student.cpp Course.h
+	$(CC) $(FLAGS) -c Student.cpp -o $@
+	
+$(OBJ)/Course.o: Course.cpp Student.h
+	$(CC) $(FLAGS) -c Course.cpp -o $@
+
+#all: scheduler_cp1 (Added lines above after the first scheduler.cpp -o $@)
 
 #scheduler_cp1: scheduler.o
 #	g++ scheduler.o -o scheduler_cp1
