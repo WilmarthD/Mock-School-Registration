@@ -7,7 +7,7 @@ Course::Course()
     crn = "1234567";
     courseNum = "1234";
     department = "No Department Given";
-    capacity = 10;
+    capacity = 0;
     size = 0;
     students = new Student[capacity];
 }
@@ -30,7 +30,6 @@ Course::Course(const Course& rhs){
     size = rhs.size;
 
     students = new Student[capacity];
-
     for(int i = 0; i < rhs.size; i++)
     {
         students[i] = rhs.students[i];
@@ -52,8 +51,8 @@ Course& Course::operator=(const Course& rhs){
         department = rhs.department;
         capacity = rhs.capacity;
         size = rhs.size;
-        Student* tempStudents = new Student[capacity];
 
+        Student* tempStudents = new Student[capacity];
         for(int i = 0; i < size; i++)
         {
             tempStudents[i] = rhs.students[i];
@@ -63,7 +62,17 @@ Course& Course::operator=(const Course& rhs){
     }
     return *this;
 }
-
+bool Course::AddStudent(Student newStudent){
+    if(size < capacity)
+    {
+        students[size] = newStudent;
+        size++;
+        return true;
+    }
+    else{
+        return false;
+    }
+}
 string Course::GetName()
 {
     return courseName;

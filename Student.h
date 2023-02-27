@@ -16,13 +16,16 @@ class Student {
         string lastName;
         string userId;
         string Bnumber;
+        int courseCapacity;
         int courseCount;
         Course *courses;
     
     public:
         Student();
         Student(string newFirstName, string newLastName, string newId, string newBnumber);
+        Student(const Student& rhs);
         ~Student();
+        Student& operator=(const Student& rhs);
         void ShowCourses();
         string GetName();
         string GetBnumber();

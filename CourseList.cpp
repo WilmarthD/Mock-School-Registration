@@ -23,6 +23,10 @@ Course CourseList::searchByCrn(string courseCrn){
     }
     return tempCourse;
 }
+void CourseList::printCourseRoster(string crn){
+    searchByCrn(crn).ShowStudents();
+}
+
 void CourseList::addCourse(string newName, string newCrn, string newCourseNum, string newDepartment){
     //Create temp pointer
     Course* tempCourses = courses;
@@ -36,32 +40,34 @@ void CourseList::addCourse(string newName, string newCrn, string newCourseNum, s
     //Add new course to front of new list
     courses[0] = Course(newName, newCrn, newCourseNum, newDepartment);
 
-    for(int i = 0; i < courseCapacity; i++)
+    for(int i = 1; i < courseCapacity; i++)
     {
-        courses[i+1] = tempCourses[i];
+        courses[i] = tempCourses[i-1]; //This is now causing segfault
     }
+    
     //Delete new pointer
-    //delete tempCourses;
+    //delete tempCourses; // Causes an error when deleting, could be double free?
 }
-void CourseList::removeCourse(string courseCrn){
+bool CourseList::removeCourse(string courseCrn){
     bool crnExists = false;
+    //Create dummy course
     Course tempCourse;
 
     for(int i = 0; i < courseCapacity; i++)
     {
         if(courses[i].GetCrn() == courseCrn)
         {
-            courses[i] = courses[courseCapacity-1];
+            if(i < courseCapacity-1)
+            {
+                for(int index = i; index < courseCapacity; index++)
+                {
+                    courses[index] = courses[index+1];
+                }            
+            }
             courses[courseCapacity-1] = tempCourse;
+            courseCapacity--;
             crnExists = true;
         }
     }
-    if(crnExists)
-    {
-        cout << courseCrn << " was successfully removed" << endl;
-    }
-    else
-    {
-        cout << courseCrn << " does not exist" << endl;
-    }
+    return crnExists;
 }

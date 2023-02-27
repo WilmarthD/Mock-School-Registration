@@ -13,8 +13,9 @@ class CourseList{
         ~CourseList();
         
         Course searchByCrn(string courseCrn);
+        void printCourseRoster(string crn);
         void addCourse(string newName, string newCrn, string newCourseNum, string newDepartment);
-        void removeCourse(string courseCrn);
+        bool removeCourse(string courseCrn);
 };
 
 #endif

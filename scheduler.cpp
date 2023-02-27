@@ -63,7 +63,7 @@ int main()
         }
         else if(inputArgs.at(0) == "build")
         {
-            if((int)inputArgs.size() != 5)
+            if((int)inputArgs.size() < 5)
             {
                 cout << "Failure: too many or too few arguments" << endl;
             }
@@ -72,8 +72,13 @@ int main()
                 allCourses.addCourse(inputArgs.at(4), inputArgs.at(1), inputArgs.at(3), inputArgs.at(2));
 
                 //Output that it was successful
-                cout << "build course " << inputArgs.at(1) << " " << inputArgs.at(2) << " ";
-                cout << inputArgs.at(3) << " " << inputArgs.at(4) << endl;
+                cout << "Successful: build course " << inputArgs.at(1) << " " << inputArgs.at(2) << " ";
+                cout << inputArgs.at(3) << " " << inputArgs.at(4);
+                for(int i = 5; i < (int)inputArgs.size(); i++)
+                {
+                    cout << " " << inputArgs.at(i);
+                } 
+                cout << endl;
             }
             else if(!regex_match(inputArgs.at(1), regex("\\d{6}")))
             {
@@ -98,9 +103,20 @@ int main()
         }
         else if(inputArgs.at(0) == "cancel")
         {
+            if((int)inputArgs.size() != 2)
+            {
+                cout << "Failure: too many or too few arguments" << endl;
+            }
             if(regex_match(inputOuterWhitespaceChecked, cancelCheck))
             {
-                cout << "cancel course " << inputArgs.at(1) << endl;
+                bool newClass = allCourses.removeCourse(inputArgs.at(1));
+                if(newClass)
+                {
+                    cout << "Success: cancel course " << inputArgs.at(1) << endl;
+                }
+                else{
+                    cout << "Fail: course " << inputArgs.at(1) << " doesn't exist" << endl;
+                }
             }
             else if(!regex_match(inputArgs.at(1), regex("\\d{6}")))
             {
@@ -110,9 +126,14 @@ int main()
         }
         else if(inputArgs.at(0) == "enroll")
         {
+            if((int)inputArgs.size() != 5)
+            {
+                cout << "Failure: too many or too few arguments" << endl;
+            }
             if(regex_match(inputOuterWhitespaceChecked, enrollCheck))
             {
-                cout << "enroll student " << inputArgs.at(1) << " (" << inputArgs.at(2) << ") " << inputArgs.at(4) << ", " << inputArgs.at(3) << endl;
+                allStudents.enrollStudent(inputArgs.at(1), inputArgs.at(2), inputArgs.at(3), inputArgs.at(4));
+                cout << "Successfull: enroll student " << inputArgs.at(1) << " (" << inputArgs.at(2) << ") " << inputArgs.at(4) << ", " << inputArgs.at(3) << endl;
             }
             else if(!regex_match(inputArgs.at(1), regex("B[0-9]{8}")))
             {
@@ -140,9 +161,12 @@ int main()
         }
         else if(inputArgs.at(0) == "add")
         {
+            if((int)inputArgs.size() != 3)
+            {
+                cout << "Failure: too many or too few arguments" << endl;
+            }
             if(regex_match(inputOuterWhitespaceChecked, addCheck))
             {
-
                 //Output that it was successful
                 cout << "add student " << inputArgs.at(1) << " into course " << inputArgs.at(2) << endl;
             }
@@ -159,6 +183,10 @@ int main()
         }
         else if(inputArgs.at(0) == "drop")
         {
+            if((int)inputArgs.size() != 3)
+            {
+                cout << "Failure: too many or too few arguments" << endl;
+            }
             if(regex_match(inputOuterWhitespaceChecked, dropCheck))
             {
                 cout << "remove student " << inputArgs.at(1) << " from course " << inputArgs.at(2) << endl;
@@ -177,9 +205,14 @@ int main()
         }
         else if(inputArgs.at(0) == "roster")
         {
+            if((int)inputArgs.size() != 2)
+            {
+                cout << "Failure: too many or too few arguments" << endl;
+            }
             if(regex_match(inputOuterWhitespaceChecked, rosterCheck))
             {
-                cout << "roster of the course " << inputArgs.at(1) << endl;
+                cout << "Successful: roster of the course " << inputArgs.at(1) << endl;
+                allCourses.printCourseRoster(inputArgs.at(1));
             }
             else if(!regex_match(inputArgs.at(1), regex("[0-9]{6}")))
             {
@@ -189,9 +222,14 @@ int main()
         }
         else if(inputArgs.at(0) == "schedule")
         {
+            if((int)inputArgs.size() != 2)
+            {
+                cout << "Failure: too many or too few arguments" << endl;
+            }
             if(regex_match(inputOuterWhitespaceChecked, scheduleCheck))
             {
-                cout << "schedule of student " << inputArgs.at(1) << endl;            
+                cout << "Success: schedule of student " << inputArgs.at(1) << endl;    
+                allStudents.printStudentSchedule(inputArgs.at(1));        
             }
             else if(!regex_match(inputArgs.at(1), regex("B[0-9]{8}")))
             {

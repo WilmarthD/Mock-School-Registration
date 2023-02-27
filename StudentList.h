@@ -12,9 +12,11 @@ class StudentList{
         StudentList(int newCapacity);
         ~StudentList();
         
-        bool searchStudent(string studentBnum);
-        void addStudent(string studentBnum, string studentId, string studentFirst, string studentLast);
-        void removeStudent(string studentBnum);
+        Student searchStudent(string studentBnum);
+        void enrollStudent(string studentBnum, string studentId, string studentFirst, string studentLast);
+        bool removeStudent(string studentBnum);
+        void printStudentSchedule(string studentBnum);
+
 };
 
 #endif

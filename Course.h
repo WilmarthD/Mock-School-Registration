@@ -29,6 +29,7 @@ class Course {
         ~Course();
 
         Course& operator=(const Course& rhs);
+        bool AddStudent(Student newStudent);
         string GetName();
         string GetCrn();
         void ShowStudents();
