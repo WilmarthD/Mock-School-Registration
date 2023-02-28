@@ -12,9 +12,10 @@ class CourseList{
         CourseList(int newCapacity);
         ~CourseList();
         
-        Course searchByCrn(string courseCrn);
+        Course* searchByCrn(string courseCrn);
         void printCourseRoster(string crn);
         void addCourse(string newName, string newCrn, string newCourseNum, string newDepartment);
+        void addNewStudent(Student* newStudent, string crn);
         bool removeCourse(string courseCrn);
 };
 

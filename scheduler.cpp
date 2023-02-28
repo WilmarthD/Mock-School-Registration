@@ -167,8 +167,17 @@ int main()
             }
             if(regex_match(inputOuterWhitespaceChecked, addCheck))
             {
+                //Add student to course roster
+                Student* tempStudent = allStudents.searchStudent(inputArgs.at(1));
+                //Student* tempPtr = &(tempStudent); //Changed return type pf search student to a pointer
+                allCourses.addNewStudent(tempStudent, inputArgs.at(2));
+
+                //Add course to student schedule
+                Course* tempCourse = allCourses.searchByCrn(inputArgs.at(2));
+                allStudents.addNewCourse(tempCourse, inputArgs.at(1));
+
                 //Output that it was successful
-                cout << "add student " << inputArgs.at(1) << " into course " << inputArgs.at(2) << endl;
+                cout << "Success: add student " << inputArgs.at(1) << " into course " << inputArgs.at(2) << endl;
             }
             else if(!regex_match(inputArgs.at(1), regex("B[0-9]{8}")))
             {

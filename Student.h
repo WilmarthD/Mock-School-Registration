@@ -25,10 +25,12 @@ class Student {
         Student(string newFirstName, string newLastName, string newId, string newBnumber);
         Student(const Student& rhs);
         ~Student();
+
         Student& operator=(const Student& rhs);
         void ShowCourses();
         string GetName();
         string GetBnumber();
+        void AddCourse(Course* newCourse);
 };
 
 #endif

@@ -18,7 +18,7 @@ Student::Student(string newFirstName, string newLastName, string newId, string n
     userId = newId;
     Bnumber = newBnumber;
     
-    courseCapacity = 5;
+    courseCapacity = 0;
     courseCount = 0;
     courses = new Course[courseCapacity];
 }
@@ -76,5 +76,34 @@ void Student::ShowCourses()
     for(int i = 0; i < courseCount; i++)
     {
         cout << courses[i].GetName() << endl;
+    }
+}
+void Student::AddCourse(Course* newCourse)
+{
+    if(courseCount < courseCapacity)
+    {
+        courses[courseCount] = *newCourse;
+        courseCount++;
+    }
+    else{
+        if(courseCapacity == 0)
+        {
+            courseCapacity++;
+        }
+        else{
+            courseCapacity *= 2;
+        }
+
+        Course* tempCourses = new Course[courseCapacity];
+        for(int i = 0; i < courseCount; i++)
+        {
+            tempCourses[i] = courses[i];
+        }
+        delete[] courses;
+        courses = tempCourses;
+
+        //Assign the new course
+        courseCount++;
+        courses[courseCount-1] = *newCourse;
     }
 }

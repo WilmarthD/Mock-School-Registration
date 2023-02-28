@@ -10,6 +10,7 @@ Course::Course()
     capacity = 0;
     size = 0;
     students = new Student[capacity];
+    //studentBnumbers = new string[capacity];
 }
 Course::Course(string newName, string newCrn, string newCourseNum, string newDepartment)
 {
@@ -20,6 +21,7 @@ Course::Course(string newName, string newCrn, string newCourseNum, string newDep
     capacity = 10;
     size = 0;
     students = new Student[capacity];
+    //studentBnumbers = new string[capacity];
 }
 Course::Course(const Course& rhs){
     courseName = rhs.courseName;
@@ -29,6 +31,11 @@ Course::Course(const Course& rhs){
     capacity = rhs.capacity;
     size = rhs.size;
 
+    // studentBnumbers = new string[capacity];
+    // for (int i = 0; i < rhs.size; i++)
+    // {
+    //     studentBnumbers[i] = rhs.studentBnumbers[i];
+    // }
     students = new Student[capacity];
     for(int i = 0; i < rhs.size; i++)
     {
@@ -41,6 +48,7 @@ Course::Course(const Course& rhs){
 Course::~Course(){
     //TA said this won't be a data leak unless implemented wrong
     delete[] students;
+    //delete[] studentBnumbers;
 }
 Course& Course::operator=(const Course& rhs){
     if(this != &rhs)
@@ -52,6 +60,13 @@ Course& Course::operator=(const Course& rhs){
         capacity = rhs.capacity;
         size = rhs.size;
 
+        // string* tempBnumber = new string[capacity];
+        // for(int i = 0; i < size; i++)
+        // {
+        //     tempBnumber[i] = rhs.studentBnumbers[i];
+        // }
+        // delete[] studentBnumbers;
+        // studentBnumbers = tempBnumber;
         Student* tempStudents = new Student[capacity];
         for(int i = 0; i < size; i++)
         {
@@ -62,15 +77,14 @@ Course& Course::operator=(const Course& rhs){
     }
     return *this;
 }
-bool Course::AddStudent(Student newStudent){
+void Course::AddStudent(Student* newStudent){
     if(size < capacity)
     {
-        students[size] = newStudent;
+        students[size] = *newStudent;
+        //studentBnumbers[size] = *newStudent;
         size++;
-        return true;
     }
     else{
-        return false;
     }
 }
 string Course::GetName()
@@ -83,7 +97,7 @@ string Course::GetCrn()
 }
 void Course::ShowStudents()
 {
-    for(int i = 0; i < capacity; i++)
+    for(int i = 0; i < size; i++)
     {
         cout << students[i].GetName() << endl;
     }

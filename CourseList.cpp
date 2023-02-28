@@ -12,21 +12,25 @@ CourseList::~CourseList(){
     delete courses;
 }
 
-Course CourseList::searchByCrn(string courseCrn){
-    Course tempCourse;
+Course* CourseList::searchByCrn(string courseCrn){
+    Course* tempCourse;
     for(int i = 0; i < courseCapacity; i++)
     {
         if(courses[i].GetCrn() == courseCrn)
         {
-            return courses[i];
+            tempCourse = &(courses[i]);
         }
     }
     return tempCourse;
 }
 void CourseList::printCourseRoster(string crn){
-    searchByCrn(crn).ShowStudents();
+    searchByCrn(crn)->ShowStudents();
 }
+void CourseList::addNewStudent(Student* newStudent, string crn){
+    Course* tempCourse = searchByCrn(crn);
+    tempCourse->AddStudent(newStudent);
 
+}
 void CourseList::addCourse(string newName, string newCrn, string newCourseNum, string newDepartment){
     //Create temp pointer
     Course* tempCourses = courses;

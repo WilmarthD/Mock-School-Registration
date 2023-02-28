@@ -12,13 +12,13 @@ StudentList::StudentList(int newCapacity){
 StudentList::~StudentList(){
     delete students;
 }
-Student StudentList::searchStudent(string studentBnum){
-    Student tempStudent;
+Student* StudentList::searchStudent(string studentBnum){
+    Student* tempStudent;
     for(int i = 0; i < studentCapacity; i++)
     {
         if(students[i].GetBnumber() == studentBnum)
         {
-            return students[i];
+            tempStudent = &(students[i]);
         }
     }
     return tempStudent;
@@ -47,6 +47,11 @@ void StudentList::enrollStudent(string studentBnum, string studentId, string stu
 bool StudentList::removeStudent(string studentBnum){
 
 }
+void StudentList::addNewCourse(Course* newCourse, string studentBnum){
+    Student* tempStudent = searchStudent(studentBnum);
+    tempStudent->AddCourse(newCourse);
+}
+
 void StudentList::printStudentSchedule(string studentBnum){
-    searchStudent(studentBnum).ShowCourses();
+    searchStudent(studentBnum)->ShowCourses();
 }     

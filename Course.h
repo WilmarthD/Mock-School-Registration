@@ -20,6 +20,7 @@ class Course {
         int capacity;
         int size;
         Student *students;
+        //string *studentBnumbers;
     
     public:
         //Constructors and destructors
@@ -29,7 +30,7 @@ class Course {
         ~Course();
 
         Course& operator=(const Course& rhs);
-        bool AddStudent(Student newStudent);
+        void AddStudent(Student* newStudent);
         string GetName();
         string GetCrn();
         void ShowStudents();
