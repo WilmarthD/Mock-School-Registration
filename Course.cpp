@@ -18,7 +18,7 @@ Course::Course(string newName, string newCrn, string newCourseNum, string newDep
     crn = newCrn;
     courseNum = newCourseNum;
     department = newDepartment;
-    capacity = 10;
+    capacity = 0;
     size = 0;
     students = new Student[capacity];
     //studentBnumbers = new string[capacity];
@@ -85,18 +85,35 @@ void Course::AddStudent(Student* newStudent){
         size++;
     }
     else{
+        if(capacity == 0)
+        {
+            capacity++;
+        }
+        else{
+            capacity *= 2;
+        }
+
+        Student* tempStudents = new Student[capacity];
+        for(int i = 0; i < size; i++)
+        {
+            tempStudents[i] = students[i];
+        }
+        delete [] students;
+        students = tempStudents;
+
+        //Assign new students
+        students[size] = *newStudent;
+        size++;
+
     }
 }
-string Course::GetName()
-{
+string Course::GetName(){
     return courseName;
 }
-string Course::GetCrn()
-{
+string Course::GetCrn(){
     return crn;
 }
-void Course::ShowStudents()
-{
+void Course::ShowStudents(){
     for(int i = 0; i < size; i++)
     {
         cout << students[i].GetName() << endl;

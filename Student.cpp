@@ -53,13 +53,15 @@ Student& Student::operator=(const Student& rhs){
         courseCapacity = rhs.courseCapacity;
         courseCount = rhs.courseCount;
 
-        Course* tempCourses = new Course[courseCapacity];
+        //Course* tempCourses = new Course[courseCapacity];
+        delete[] courses;
+        courses = new Course[courseCapacity];
         for(int i = 0; i < courseCount; i++)
         {
             courses[i] = rhs.courses[i];
         }
-        delete[] courses;
-        courses = tempCourses;
+        //delete[] courses;
+        //courses = tempCourses;
     }
     return *this;
 }
