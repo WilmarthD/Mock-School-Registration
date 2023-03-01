@@ -109,3 +109,24 @@ void Student::AddCourse(Course* newCourse)
         courses[courseCount-1] = *newCourse;
     }
 }
+void Student::DropCourse(string courseCrn){
+    //Dummy course object
+    Course tempCourse;
+    for(int i = 0; i < courseCount; i++)
+    {
+        if(courseCrn == courses[i].GetCrn())
+        {
+            if(i < courseCount-1)
+            {
+                for(int index = i; index < courseCount; index++)
+                {
+                    courses[index] = courses[index+1];
+                }
+            }
+            //Size count down and place dummy course in its place
+            courseCount--;
+            courses[courseCount] = tempCourse;
+        }
+    }
+}
+

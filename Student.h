@@ -31,6 +31,7 @@ class Student {
         string GetName();
         string GetBnumber();
         void AddCourse(Course* newCourse);
+        void DropCourse(string courseCrn);
 };
 
 #endif

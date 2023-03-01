@@ -10,7 +10,7 @@ StudentList::StudentList(int newCapacity){
     students = new Student[studentCapacity];
 }
 StudentList::~StudentList(){
-    delete students;
+    delete[] students;
 }
 Student* StudentList::searchStudent(string studentBnum){
     Student* tempStudent;
@@ -44,12 +44,39 @@ void StudentList::enrollStudent(string studentBnum, string studentId, string stu
     //Delete new pointer
     //delete tempCourses; // Causes an error when deleting, could be double free?
 }
-bool StudentList::removeStudent(string studentBnum){
+void StudentList::removeStudentsInCourse(string oldCrn){
+    //bool studentExists = false;
+    //Student tempStudent;
 
+    for(int i = 0; i < studentCapacity; i++)
+    {
+        students[i].DropCourse(oldCrn);
+    }
+    /*for(int i = 0; i < studentCapacity; i++)
+    {
+        if(students[i].GetBnumber() == studentBnum) //studentBnum was passed by string before change
+        {
+            if(i < studentCapacity-1)
+            {
+                for(int index = i; index < studentCapacity; index++)
+                {
+                    students[index] = students[index+1];
+                }
+            }
+            students[studentCapacity-1] = tempStudent;
+            studentCapacity--;
+            studentExists = true;
+        }
+    }*/
+    //return studentExists;
 }
 void StudentList::addNewCourse(Course* newCourse, string studentBnum){
     Student* tempStudent = searchStudent(studentBnum);
     tempStudent->AddCourse(newCourse);
+}
+void StudentList::dropCourse(Course* newCourse, string studentBnum){
+    Student* tempStudent = searchStudent(studentBnum);
+    tempStudent->DropCourse(newCourse->GetCrn());
 }
 
 void StudentList::printStudentSchedule(string studentBnum){

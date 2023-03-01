@@ -9,7 +9,7 @@ CourseList::CourseList(int newCapacity){
     courses = new Course[newCapacity];
 }
 CourseList::~CourseList(){
-    delete courses;
+    delete[] courses;
 }
 
 Course* CourseList::searchByCrn(string courseCrn){
@@ -29,7 +29,10 @@ void CourseList::printCourseRoster(string crn){
 void CourseList::addNewStudent(Student* newStudent, string crn){
     Course* tempCourse = searchByCrn(crn);
     tempCourse->AddStudent(newStudent);
-
+}
+void CourseList::dropStudent(Student* oldStudent, string crn){
+    Course* tempCourse = searchByCrn(crn);
+    tempCourse->RemoveStudent(oldStudent);
 }
 void CourseList::addCourse(string newName, string newCrn, string newCourseNum, string newDepartment){
     //Create temp pointer
@@ -61,6 +64,7 @@ bool CourseList::removeCourse(string courseCrn){
     {
         if(courses[i].GetCrn() == courseCrn)
         {
+            //Course found
             if(i < courseCapacity-1)
             {
                 for(int index = i; index < courseCapacity; index++)

@@ -13,6 +13,7 @@ using namespace std;
 
 void Parse(string inputString, vector<string> &tokensVector);
 void showPrompt();
+//void DeleteLists(StudentList& sList, CourseList& cList);
 void ErrorOutput(int error);
 
 int main()
@@ -109,6 +110,9 @@ int main()
             }
             if(regex_match(inputOuterWhitespaceChecked, cancelCheck))
             {
+                //Remove course from student schedule
+                allStudents.removeStudentsInCourse(inputArgs.at(1));
+                
                 bool newClass = allCourses.removeCourse(inputArgs.at(1));
                 if(newClass)
                 {
@@ -198,7 +202,15 @@ int main()
             }
             if(regex_match(inputOuterWhitespaceChecked, dropCheck))
             {
-                cout << "remove student " << inputArgs.at(1) << " from course " << inputArgs.at(2) << endl;
+                //Remove student from course roster
+                Student* tempOldStudent = allStudents.searchStudent(inputArgs.at(1));
+                allCourses.dropStudent(tempOldStudent, inputArgs.at(2));
+
+                //Remove course from student schedule
+                Course* tempOldCourse = allCourses.searchByCrn(inputArgs.at(2));
+                allStudents.dropCourse(tempOldCourse, inputArgs.at(1));
+
+                cout << "Success: remove student " << inputArgs.at(1) << " from course " << inputArgs.at(2) << endl;
             }
             else if(!regex_match(inputArgs.at(1), regex("B[0-9]{8}")))
             {
@@ -264,6 +276,8 @@ int main()
         showPrompt();
     }
 
+    //DeleteLists(allStudents, allCourses);
+    
     return 0;
 }
 
@@ -290,6 +304,14 @@ void showPrompt() {
             "       \"quit\"]" << endl <<
             ": ";
 }
+
+/*void DeleteLists(StudentList& sList, CourseList& cList)
+{
+    Student* tempSptr = sList.students;
+    Course* tempCptr = cList.courses;
+    delete[] tempSptr;
+    delete[] tempCptr;
+}*/
 
 //Function to output diffrent error messages depending on int
 void ErrorOutput(int error)

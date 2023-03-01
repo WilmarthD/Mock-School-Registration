@@ -60,20 +60,24 @@ Course& Course::operator=(const Course& rhs){
         capacity = rhs.capacity;
         size = rhs.size;
 
-        // string* tempBnumber = new string[capacity];
-        // for(int i = 0; i < size; i++)
-        // {
-        //     tempBnumber[i] = rhs.studentBnumbers[i];
-        // }
-        // delete[] studentBnumbers;
-        // studentBnumbers = tempBnumber;
-        Student* tempStudents = new Student[capacity];
+        /* string* tempBnumber = new string[capacity];
+         for(int i = 0; i < size; i++)
+         {
+             tempBnumber[i] = rhs.studentBnumbers[i];
+         }
+         delete[] studentBnumbers;
+         studentBnumbers = tempBnumber;*/
+
+
+        //Student* tempStudents = new Student[capacity];
+        delete[] students;
+        students = new Student[capacity];
         for(int i = 0; i < size; i++)
         {
-            tempStudents[i] = rhs.students[i];
+            students[i] = rhs.students[i];
         }
-        delete[] students;
-        students = tempStudents;
+        //delete[] students;
+        //students = tempStudents;
     }
     return *this;
 }
@@ -107,6 +111,22 @@ void Course::AddStudent(Student* newStudent){
 
     }
 }
+void Course::RemoveStudent(Student* newStudent){
+    Student tempStudent;
+    for(int i = 0; i < size; i++)
+    {
+        if(students[i].GetBnumber() == newStudent->GetBnumber())
+        {
+            for(int index = i; index < size; index++)
+            {
+                students[index] = students[index+1];
+            }
+            size--;
+            students[size] = tempStudent;
+        }
+    }
+}
+
 string Course::GetName(){
     return courseName;
 }

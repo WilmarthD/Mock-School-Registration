@@ -31,6 +31,7 @@ class Course {
 
         Course& operator=(const Course& rhs);
         void AddStudent(Student* newStudent);
+        void RemoveStudent(Student* newStudent);
         string GetName();
         string GetCrn();
         void ShowStudents();
