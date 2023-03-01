@@ -13,7 +13,7 @@ CourseList::~CourseList(){
 }
 
 Course* CourseList::searchByCrn(string courseCrn){
-    Course* tempCourse;
+    Course* tempCourse = new Course;
     for(int i = 0; i < courseCapacity; i++)
     {
         if(courses[i].GetCrn() == courseCrn)
@@ -55,8 +55,8 @@ void CourseList::addCourse(string newName, string newCrn, string newCourseNum, s
     //Delete new pointer
     //delete tempCourses; // Causes an error when deleting, could be double free?
 }
-bool CourseList::removeCourse(string courseCrn){
-    bool crnExists = false;
+void CourseList::removeCourse(string courseCrn){
+    //bool crnExists = false;
     //Create dummy course
     Course tempCourse;
 
@@ -74,8 +74,13 @@ bool CourseList::removeCourse(string courseCrn){
             }
             courses[courseCapacity-1] = tempCourse;
             courseCapacity--;
-            crnExists = true;
+            //crnExists = true;
         }
     }
-    return crnExists;
+    //return crnExists;
+}
+bool CourseList::enrolledInCourse(string courseCrn, string studentBnum){
+
+    Course* tempCourse = searchByCrn(courseCrn);
+    return tempCourse[0].CheckStudentEnrolled(studentBnum);
 }

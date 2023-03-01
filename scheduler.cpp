@@ -13,7 +13,6 @@ using namespace std;
 
 void Parse(string inputString, vector<string> &tokensVector);
 void showPrompt();
-//void DeleteLists(StudentList& sList, CourseList& cList);
 void ErrorOutput(int error);
 
 int main()
@@ -70,16 +69,29 @@ int main()
             }
             else if(regex_match(inputOuterWhitespaceChecked, buildCheck))
             {
-                allCourses.addCourse(inputArgs.at(4), inputArgs.at(1), inputArgs.at(3), inputArgs.at(2));
-
-                //Output that it was successful
-                cout << "Successful: build course " << inputArgs.at(1) << " " << inputArgs.at(2) << " ";
-                cout << inputArgs.at(3) << " " << inputArgs.at(4);
-                for(int i = 5; i < (int)inputArgs.size(); i++)
+                //Check if course exists, if it doesn't the function should return a diffrent crn
+                if(allCourses.searchByCrn(inputArgs.at(1))->GetCrn() == inputArgs.at(1))
                 {
-                    cout << " " << inputArgs.at(i);
-                } 
-                cout << endl;
+                    cout << "Failure: crn " << inputArgs.at(1) << " already exists" << endl;
+                }
+                else{
+                    string courseName = "";
+                    //Create for loop to set all words in name to a string
+                    for(int index = 4; index < (int)inputArgs.size(); index++)
+                    {
+                        courseName += inputArgs.at(index) + " ";
+                    }
+                    allCourses.addCourse(courseName, inputArgs.at(1), inputArgs.at(3), inputArgs.at(2));
+
+                    //Output that it was successful
+                    cout << "Success: build course " << inputArgs.at(1) << " " << inputArgs.at(2) << " ";
+                    cout << inputArgs.at(3) << " " << inputArgs.at(4);
+                    for(int i = 5; i < (int)inputArgs.size(); i++)
+                    {
+                        cout << " " << inputArgs.at(i);
+                    } 
+                    cout << endl;
+                }
             }
             else if(!regex_match(inputArgs.at(1), regex("\\d{6}")))
             {
@@ -110,16 +122,17 @@ int main()
             }
             if(regex_match(inputOuterWhitespaceChecked, cancelCheck))
             {
-                //Remove course from student schedule
-                allStudents.removeStudentsInCourse(inputArgs.at(1));
-                
-                bool newClass = allCourses.removeCourse(inputArgs.at(1));
-                if(newClass)
+                //Check if course exists
+                if(allCourses.searchByCrn(inputArgs.at(1))->GetCrn() != inputArgs.at(1))
                 {
-                    cout << "Success: cancel course " << inputArgs.at(1) << endl;
+                    cout << "Failure: crn " << inputArgs.at(1) << " doesn't exist" << endl;
                 }
                 else{
-                    cout << "Fail: course " << inputArgs.at(1) << " doesn't exist" << endl;
+                    //Remove course from student schedule
+                    allStudents.removeStudentsInCourse(inputArgs.at(1));
+                    allCourses.removeCourse(inputArgs.at(1));
+    
+                    cout << "Success: cancel course " << inputArgs.at(1) << endl;
                 }
             }
             else if(!regex_match(inputArgs.at(1), regex("\\d{6}")))
@@ -136,13 +149,20 @@ int main()
             }
             if(regex_match(inputOuterWhitespaceChecked, enrollCheck))
             {
-                allStudents.enrollStudent(inputArgs.at(1), inputArgs.at(2), inputArgs.at(3), inputArgs.at(4));
-                cout << "Successfull: enroll student " << inputArgs.at(1) << " (" << inputArgs.at(2) << ") " << inputArgs.at(4) << ", " << inputArgs.at(3) << endl;
+                //Check if student exists, if not it will return the default b number
+                if(allStudents.searchStudent(inputArgs.at(1))->GetBnumber() == inputArgs.at(1))
+                {
+                    cout << "Fail: student " << inputArgs.at(1) << " already exists" << endl;
+                }
+                else{
+                    allStudents.enrollStudent(inputArgs.at(1), inputArgs.at(2), inputArgs.at(3), inputArgs.at(4));
+                    cout << "Success: enroll student " << inputArgs.at(1) << " (" << inputArgs.at(2) << ") " << inputArgs.at(4) << ", " << inputArgs.at(3) << endl;
+                }
             }
             else if(!regex_match(inputArgs.at(1), regex("B[0-9]{8}")))
             {
                 //Malformed Bnumber
-                cout << "Failure: Malformed Bnumber " << inputArgs.at(1) << endl;
+                cout << "Fail: Malformed Bnumber " << inputArgs.at(1) << endl;
                 //continue;
             }
             else if(!regex_match(inputArgs.at(2), regex("[a-z][a-zA-Z0-9]*")))
@@ -171,17 +191,28 @@ int main()
             }
             if(regex_match(inputOuterWhitespaceChecked, addCheck))
             {
-                //Add student to course roster
-                Student* tempStudent = allStudents.searchStudent(inputArgs.at(1));
-                //Student* tempPtr = &(tempStudent); //Changed return type pf search student to a pointer
-                allCourses.addNewStudent(tempStudent, inputArgs.at(2));
+                //Check if student is already enrolled in course
+                Course* tempAddCourse = allCourses.searchByCrn(inputArgs.at(2));
+                Student* tempAddStudent = allStudents.searchStudent(inputArgs.at(1));
 
-                //Add course to student schedule
-                Course* tempCourse = allCourses.searchByCrn(inputArgs.at(2));
-                allStudents.addNewCourse(tempCourse, inputArgs.at(1));
+                if(tempAddStudent->GetBnumber() != inputArgs.at(1))
+                {
+                    cout << "Fail: student " << inputArgs.at(1) << " doesn't exist" << endl;
+                }
+                else if(tempAddCourse->GetCrn() != inputArgs.at(2))
+                {
+                    cout << "Fail: course " << inputArgs.at(2) << " doesn't exist" << endl;
+                }
+                else{
+                    //Add student to course roster
+                    allCourses.addNewStudent(tempAddStudent, inputArgs.at(2));
+                    //Add course to student schedule
+                    allStudents.addNewCourse(tempAddCourse, inputArgs.at(1));
 
-                //Output that it was successful
-                cout << "Success: add student " << inputArgs.at(1) << " into course " << inputArgs.at(2) << endl;
+                    //Output that it was successful
+                    cout << "Success: add student " << inputArgs.at(1) << " into course " << inputArgs.at(2) << endl;
+                }
+                
             }
             else if(!regex_match(inputArgs.at(1), regex("B[0-9]{8}")))
             {
@@ -200,17 +231,33 @@ int main()
             {
                 cout << "Failure: too many or too few arguments" << endl;
             }
+
             if(regex_match(inputOuterWhitespaceChecked, dropCheck))
             {
-                //Remove student from course roster
                 Student* tempOldStudent = allStudents.searchStudent(inputArgs.at(1));
-                allCourses.dropStudent(tempOldStudent, inputArgs.at(2));
-
-                //Remove course from student schedule
                 Course* tempOldCourse = allCourses.searchByCrn(inputArgs.at(2));
-                allStudents.dropCourse(tempOldCourse, inputArgs.at(1));
 
-                cout << "Success: remove student " << inputArgs.at(1) << " from course " << inputArgs.at(2) << endl;
+                if(tempOldStudent->GetBnumber() != inputArgs.at(1))
+                {
+                    cout << "Fail: student " << inputArgs.at(1) << " doesn't exist" << endl;
+                }
+                else if(tempOldCourse->GetCrn() != inputArgs.at(2))
+                {
+                    cout << "Fail: course " << inputArgs.at(2) << " doesn't exist" << endl;
+                }
+                else if(!allCourses.enrolledInCourse(inputArgs.at(2), inputArgs.at(1)))
+                {
+                    cout << "Fail: the student " << inputArgs.at(1) << " is not in course " << inputArgs.at(2) << endl;
+                }
+                else{
+                    //Remove student from course roster
+                    allCourses.dropStudent(tempOldStudent, inputArgs.at(2));
+                    //Remove course from student schedule
+                    allStudents.dropCourse(tempOldCourse, inputArgs.at(1));
+
+                    cout << "Success: remove student " << inputArgs.at(1) << " from course " << inputArgs.at(2) << endl;
+                }
+
             }
             else if(!regex_match(inputArgs.at(1), regex("B[0-9]{8}")))
             {
@@ -232,8 +279,15 @@ int main()
             }
             if(regex_match(inputOuterWhitespaceChecked, rosterCheck))
             {
-                cout << "Successful: roster of the course " << inputArgs.at(1) << endl;
-                allCourses.printCourseRoster(inputArgs.at(1));
+                //Check if course exists, if it doesn't the function should return a diffrent crn
+                if(allCourses.searchByCrn(inputArgs.at(1))->GetCrn() != inputArgs.at(1))
+                {
+                    cout << "Failure: crn " << inputArgs.at(1) << " doesn't exists" << endl;
+                }
+                else{
+                    cout << "Success: roster of course " << inputArgs.at(1) << endl;
+                    allCourses.printCourseRoster(inputArgs.at(1));
+                }
             }
             else if(!regex_match(inputArgs.at(1), regex("[0-9]{6}")))
             {
@@ -249,8 +303,15 @@ int main()
             }
             if(regex_match(inputOuterWhitespaceChecked, scheduleCheck))
             {
-                cout << "Success: schedule of student " << inputArgs.at(1) << endl;    
-                allStudents.printStudentSchedule(inputArgs.at(1));        
+                //Check if student exists, if not it will return the default b number
+                if(allStudents.searchStudent(inputArgs.at(1))->GetBnumber() != inputArgs.at(1))
+                {
+                    cout << "Fail: student " << inputArgs.at(1) << " doesn't exists" << endl;
+                }
+                else{
+                    cout << "Success: schedule of student " << inputArgs.at(1) << endl;    
+                    allStudents.printStudentSchedule(inputArgs.at(1)); 
+                } 
             }
             else if(!regex_match(inputArgs.at(1), regex("B[0-9]{8}")))
             {
@@ -276,7 +337,6 @@ int main()
         showPrompt();
     }
 
-    //DeleteLists(allStudents, allCourses);
     
     return 0;
 }
@@ -305,13 +365,6 @@ void showPrompt() {
             ": ";
 }
 
-/*void DeleteLists(StudentList& sList, CourseList& cList)
-{
-    Student* tempSptr = sList.students;
-    Course* tempCptr = cList.courses;
-    delete[] tempSptr;
-    delete[] tempCptr;
-}*/
 
 //Function to output diffrent error messages depending on int
 void ErrorOutput(int error)

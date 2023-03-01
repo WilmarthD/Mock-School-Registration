@@ -35,6 +35,7 @@ class Course {
         string GetName();
         string GetCrn();
         void ShowStudents();
+        bool CheckStudentEnrolled(string studentBnumber);
 };
 
 #endif

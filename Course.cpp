@@ -117,9 +117,12 @@ void Course::RemoveStudent(Student* newStudent){
     {
         if(students[i].GetBnumber() == newStudent->GetBnumber())
         {
-            for(int index = i; index < size; index++)
+            if(i != size-1)
             {
-                students[index] = students[index+1];
+                for(int index = i; index < size-1; index++)
+                {
+                    students[index] = students[index+1];
+                }
             }
             size--;
             students[size] = tempStudent;
@@ -138,4 +141,15 @@ void Course::ShowStudents(){
     {
         cout << students[i].GetName() << endl;
     }
+}
+bool Course::CheckStudentEnrolled(string studentBnumber){
+    bool studentExists = false;
+    for(int i = 0; i < size; i++)
+    {
+        if(students[i].GetBnumber() == studentBnumber)
+        {
+            studentExists = true;
+        }
+    }
+    return studentExists;
 }

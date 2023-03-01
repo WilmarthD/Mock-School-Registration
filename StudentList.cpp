@@ -13,7 +13,7 @@ StudentList::~StudentList(){
     delete[] students;
 }
 Student* StudentList::searchStudent(string studentBnum){
-    Student* tempStudent;
+    Student* tempStudent = new Student;
     for(int i = 0; i < studentCapacity; i++)
     {
         if(students[i].GetBnumber() == studentBnum)
