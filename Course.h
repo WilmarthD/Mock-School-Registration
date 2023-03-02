@@ -35,6 +35,8 @@ class Course {
         string GetName();
         string GetCrn();
         void ShowStudents();
+        int GetRosterSize();
+        string GetCourseFullName();
         bool CheckStudentEnrolled(string studentBnumber);
 };
 

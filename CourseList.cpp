@@ -26,6 +26,10 @@ Course* CourseList::searchByCrn(string courseCrn){
 void CourseList::printCourseRoster(string crn){
     searchByCrn(crn)->ShowStudents();
 }
+int CourseList::getStudentCount(string crn){
+    Course* tempCourse = searchByCrn(crn);
+    return tempCourse->GetRosterSize();
+}
 void CourseList::addNewStudent(Student* newStudent, string crn){
     Course* tempCourse = searchByCrn(crn);
     tempCourse->AddStudent(newStudent);

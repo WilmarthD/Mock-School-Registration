@@ -14,6 +14,7 @@ class CourseList{
         
         Course* searchByCrn(string courseCrn);
         void printCourseRoster(string crn);
+        int getStudentCount(string crn);
         void addCourse(string newName, string newCrn, string newCourseNum, string newDepartment);
         void addNewStudent(Student* newStudent, string crn);
         void dropStudent(Student* oldStudent, string crn);

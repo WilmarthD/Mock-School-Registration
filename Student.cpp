@@ -77,7 +77,7 @@ void Student::ShowCourses()
 {
     for(int i = 0; i < courseCount; i++)
     {
-        cout << courses[i].GetName() << endl;
+        cout << courses[i].GetCourseFullName() << endl;
     }
 }
 void Student::AddCourse(Course* newCourse)

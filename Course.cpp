@@ -129,7 +129,11 @@ void Course::RemoveStudent(Student* newStudent){
         }
     }
 }
-
+string Course::GetCourseFullName(){
+    string tempString = "";
+    tempString = crn + " " + department + " " + courseNum + " " + courseName;
+    return tempString;
+}
 string Course::GetName(){
     return courseName;
 }
@@ -139,8 +143,11 @@ string Course::GetCrn(){
 void Course::ShowStudents(){
     for(int i = 0; i < size; i++)
     {
-        cout << students[i].GetName() << endl;
+        cout << students[i].GetBnumber() << " " << students[i].GetName() << endl;
     }
+}
+int Course::GetRosterSize(){
+    return size;
 }
 bool Course::CheckStudentEnrolled(string studentBnumber){
     bool studentExists = false;

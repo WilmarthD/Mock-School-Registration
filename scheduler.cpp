@@ -28,8 +28,8 @@ int main()
 
     //Regex checking input(need to add second '\' before d compared to regex101)
     regex buildCheck("build \\d{6} [A-Z]{2,4} [100-700]{3} [a-zA-Z0-9]+( [a-zA-Z0-9_]+)*");
-    regex cancelCheck("cancel \\d{6}");
-    regex enrollCheck("enroll B[0-9]{8} [a-z][a-zA-Z0-9]* [a-zA-Z]* [a-zA-Z]*");
+    regex cancelCheck("cancel \\d{6}"); 
+    regex enrollCheck("enroll B[0-9]{8} [a-z][a-zA-Z0-9]* [a-zA-Z]* [a-zA-Z]*"); //[a-zA-Z0-9]+( [a-zA-Z0-9_]+)*
     regex addCheck("add B[0-9]{8} [0-9]{6}");
     regex dropCheck("drop B[0-9]{8} [0-9]{6}");
     regex rosterCheck("roster [0-9]{6}");
@@ -65,14 +65,15 @@ int main()
         {
             if((int)inputArgs.size() < 5)
             {
-                cout << "Failure: too many or too few arguments" << endl;
+                cout << "Input Error: too few arguments" << endl;
             }
             else if(regex_match(inputOuterWhitespaceChecked, buildCheck))
             {
                 //Check if course exists, if it doesn't the function should return a diffrent crn
                 if(allCourses.searchByCrn(inputArgs.at(1))->GetCrn() == inputArgs.at(1))
                 {
-                    cout << "Failure: crn " << inputArgs.at(1) << " already exists" << endl;
+                    cout << "Fail: cannot build course " << inputArgs.at(2) << inputArgs.at(3) << " (CRN: " << inputArgs.at(1) << "):" << endl;
+                    cout << "CRN exists" << endl;
                 }
                 else{
                     string courseName = "";
@@ -84,8 +85,8 @@ int main()
                     allCourses.addCourse(courseName, inputArgs.at(1), inputArgs.at(3), inputArgs.at(2));
 
                     //Output that it was successful
-                    cout << "Success: build course " << inputArgs.at(1) << " " << inputArgs.at(2) << " ";
-                    cout << inputArgs.at(3) << " " << inputArgs.at(4);
+                    cout << "Success: built course " << inputArgs.at(2) << inputArgs.at(3) << " (CRN: " << inputArgs.at(1) << "): ";
+                    cout << inputArgs.at(4);
                     for(int i = 5; i < (int)inputArgs.size(); i++)
                     {
                         cout << " " << inputArgs.at(i);
@@ -96,98 +97,107 @@ int main()
             else if(!regex_match(inputArgs.at(1), regex("\\d{6}")))
             {
                 //Malformed crn
-                cout << "Failure: Malformed CRN " << inputArgs.at(1) << endl;
+                cout << "Input Error: illegal CRN: " << inputArgs.at(1) << endl;
             }
             else if(!regex_match(inputArgs.at(2), regex("[A-Z]{2,4}")))
             {
                 //Malformed department
-                cout << "Failure: Malformed department " << inputArgs.at(2) << endl;
+                cout << "Input Error: illegal department: " << inputArgs.at(2) << endl;
             }
             else if(!regex_match(inputArgs.at(3), regex("[100-700]{3}")))
             {
                 //Malformed course number
-                cout << "Failure: Malformed course number " << inputArgs.at(3) << endl;
+                cout << "Input Error: illegal course number: " << inputArgs.at(3) << endl;
             }
             else if(!regex_match(inputArgs.at(4), regex("[a-zA-Z0-9]+( [a-zA-Z0-9_]+)*")))
             {
                 //Malformed course name
-                cout << "Failure: Malformed course name " << inputArgs.at(4) << endl;
+                cout << "Failure: Illegal course name characters" << endl;
             }
         }
         else if(inputArgs.at(0) == "cancel")
         {
-            if((int)inputArgs.size() != 2)
+            if((int)inputArgs.size() >= 2)
             {
-                cout << "Failure: too many or too few arguments" << endl;
+                cout << "Warning: ignoring extra arguments" << endl;
+                inputOuterWhitespaceChecked = inputArgs.at(0) + " " + inputArgs.at(1);
             }
             if(regex_match(inputOuterWhitespaceChecked, cancelCheck))
             {
                 //Check if course exists
                 if(allCourses.searchByCrn(inputArgs.at(1))->GetCrn() != inputArgs.at(1))
                 {
-                    cout << "Failure: crn " << inputArgs.at(1) << " doesn't exist" << endl;
+                    cout << "Fail: cannot cancel course, CRN does not exit: " << inputArgs.at(1) << " doesn't exist" << endl;
                 }
                 else{
                     //Remove course from student schedule
                     allStudents.removeStudentsInCourse(inputArgs.at(1));
                     allCourses.removeCourse(inputArgs.at(1));
     
-                    cout << "Success: cancel course " << inputArgs.at(1) << endl;
+                    cout << "Success: cancelled course " << inputArgs.at(1) << endl;
                 }
             }
             else if(!regex_match(inputArgs.at(1), regex("\\d{6}")))
             {
                 //Malformed crn
-                cout << "Failure: Malformed CRN " << inputArgs.at(1) << endl;
+                cout << "Input Error: illegal CRN: " << inputArgs.at(1) << endl;
             }
         }
         else if(inputArgs.at(0) == "enroll")
         {
-            if((int)inputArgs.size() != 5)
+            if((int)inputArgs.size() < 5)
             {
-                cout << "Failure: too many or too few arguments" << endl;
+                cout << "Input Error: too few arguments" << endl;
             }
-            if(regex_match(inputOuterWhitespaceChecked, enrollCheck))
+            //Change string to be accepeted into check since last name's don't matter
+            string enrollString = inputArgs.at(0) + " " + inputArgs.at(1) + " " + inputArgs.at(2) + " " + inputArgs.at(3) + " " + inputArgs.at(4);
+            if(regex_match(enrollString, enrollCheck))
             {
                 //Check if student exists, if not it will return the default b number
                 if(allStudents.searchStudent(inputArgs.at(1))->GetBnumber() == inputArgs.at(1))
                 {
-                    cout << "Fail: student " << inputArgs.at(1) << " already exists" << endl;
+                    cout << "Fail: cannot enroll student, B Number " << inputArgs.at(1) << " exists" << endl;
                 }
                 else{
-                    allStudents.enrollStudent(inputArgs.at(1), inputArgs.at(2), inputArgs.at(3), inputArgs.at(4));
-                    cout << "Success: enroll student " << inputArgs.at(1) << " (" << inputArgs.at(2) << ") " << inputArgs.at(4) << ", " << inputArgs.at(3) << endl;
+                    //Set last name to include whitespace
+                    string studentLastName = "";
+                    for(int i = 4; i < (int)inputArgs.size(); i++)
+                    {
+                        studentLastName += inputArgs.at(i) + " ";
+                    }
+                    allStudents.enrollStudent(inputArgs.at(1), inputArgs.at(2), inputArgs.at(3), studentLastName);
+                    cout << "Success: enrolled student " << inputArgs.at(1) << " (" << inputArgs.at(2) << ") " << studentLastName << ", " << inputArgs.at(3) << endl;
                 }
             }
             else if(!regex_match(inputArgs.at(1), regex("B[0-9]{8}")))
             {
                 //Malformed Bnumber
-                cout << "Fail: Malformed Bnumber " << inputArgs.at(1) << endl;
+                cout << "Input Error: invalid Bnumber " << inputArgs.at(1) << endl;
                 //continue;
             }
             else if(!regex_match(inputArgs.at(2), regex("[a-z][a-zA-Z0-9]*")))
             {
                 //Malformed userId
-                cout << "Failure: Malformed userId " << inputArgs.at(2) << endl;
+                cout << "Input Error: invalid userId " << inputArgs.at(2) << endl;
                 //continue;
             }
             else if(!regex_match(inputArgs.at(3), regex("[a-zA-Z]*")))
             {
                 //Malformed first name
-                cout << "Failure: Malformed first name " << inputArgs.at(3) << endl;
+                cout << "Input Error: invalid first name " << inputArgs.at(3) << endl;
                 //continue;
             }
             else if(!regex_match(inputArgs.at(4), regex("[a-zA-Z]*")))
             {
                 //Malformed last name
-                cout << "Failure: Malformed last name " << inputArgs.at(4) << endl;
+                cout << "Input Error: invalid last name " << inputArgs.at(4) << endl;
             }
         }
         else if(inputArgs.at(0) == "add")
         {
             if((int)inputArgs.size() != 3)
             {
-                cout << "Failure: too many or too few arguments" << endl;
+                cout << "Fail: too many or too few arguments" << endl;
             }
             if(regex_match(inputOuterWhitespaceChecked, addCheck))
             {
@@ -203,6 +213,10 @@ int main()
                 {
                     cout << "Fail: course " << inputArgs.at(2) << " doesn't exist" << endl;
                 }
+                else if(allCourses.enrolledInCourse(inputArgs.at(2), inputArgs.at(1)))
+                {
+                    cout << "Fail: cannot add, student " << inputArgs.at(1) << " already enrolled in course " << inputArgs.at(2) << endl;
+                }
                 else{
                     //Add student to course roster
                     allCourses.addNewStudent(tempAddStudent, inputArgs.at(2));
@@ -210,26 +224,25 @@ int main()
                     allStudents.addNewCourse(tempAddCourse, inputArgs.at(1));
 
                     //Output that it was successful
-                    cout << "Success: add student " << inputArgs.at(1) << " into course " << inputArgs.at(2) << endl;
+                    cout << "Success: added student " << inputArgs.at(1) << " into course " << inputArgs.at(2) << endl;
                 }
-                
             }
             else if(!regex_match(inputArgs.at(1), regex("B[0-9]{8}")))
             {
                 //Malformed Bnumber
-                cout << "Failure: Malformed CRN " << inputArgs.at(1) << endl;
+                cout << "Input Error: invalid Bnumber " << inputArgs.at(1) << endl;
             }
             else if(!regex_match(inputArgs.at(2), regex("[0-9]{6}")))
             {
                 //Malformed crn
-                cout << "Failure: Malformed CRN " << inputArgs.at(2) << endl;
+                cout << "Input Error: invalid CRN " << inputArgs.at(2) << endl;
             }
         }
         else if(inputArgs.at(0) == "drop")
         {
             if((int)inputArgs.size() != 3)
             {
-                cout << "Failure: too many or too few arguments" << endl;
+                cout << "Fail: too many or too few arguments" << endl;
             }
 
             if(regex_match(inputOuterWhitespaceChecked, dropCheck))
@@ -247,7 +260,7 @@ int main()
                 }
                 else if(!allCourses.enrolledInCourse(inputArgs.at(2), inputArgs.at(1)))
                 {
-                    cout << "Fail: the student " << inputArgs.at(1) << " is not in course " << inputArgs.at(2) << endl;
+                    cout << "Fail: cannot drop, student " << inputArgs.at(1) << " is not enrolled in course " << inputArgs.at(2) << endl;
                 }
                 else{
                     //Remove student from course roster
@@ -255,19 +268,19 @@ int main()
                     //Remove course from student schedule
                     allStudents.dropCourse(tempOldCourse, inputArgs.at(1));
 
-                    cout << "Success: remove student " << inputArgs.at(1) << " from course " << inputArgs.at(2) << endl;
+                    cout << "Success: removed student " << inputArgs.at(1) << " from course " << inputArgs.at(2) << endl;
                 }
 
             }
             else if(!regex_match(inputArgs.at(1), regex("B[0-9]{8}")))
             {
                 //Malformed Bnumber
-                cout << "Failure: Malformed Bnumber " << inputArgs.at(1) << endl;
+                cout << "Input Error: invalid Bnumber " << inputArgs.at(1) << endl;
             }
             else if(!regex_match(inputArgs.at(2), regex("[0-9]{6}")))
             {
                 //Malformed crn
-                cout << "Failure: Malformed CRN " << inputArgs.at(2) << endl;
+                cout << "Input Error: invalid CRN " << inputArgs.at(2) << endl;
                 //continue;
             }
         }
@@ -275,31 +288,32 @@ int main()
         {
             if((int)inputArgs.size() != 2)
             {
-                cout << "Failure: too many or too few arguments" << endl;
+                cout << "Fail: too many or too few arguments" << endl;
             }
             if(regex_match(inputOuterWhitespaceChecked, rosterCheck))
             {
                 //Check if course exists, if it doesn't the function should return a diffrent crn
                 if(allCourses.searchByCrn(inputArgs.at(1))->GetCrn() != inputArgs.at(1))
                 {
-                    cout << "Failure: crn " << inputArgs.at(1) << " doesn't exists" << endl;
+                    cout << "Fail: crn " << inputArgs.at(1) << " doesn't exists" << endl;
                 }
                 else{
-                    cout << "Success: roster of course " << inputArgs.at(1) << endl;
+                    cout << "CRN: " << inputArgs.at(1) << endl;
+                    cout << "Students: " << allCourses.getStudentCount(inputArgs.at(1)) << endl;
                     allCourses.printCourseRoster(inputArgs.at(1));
                 }
             }
             else if(!regex_match(inputArgs.at(1), regex("[0-9]{6}")))
             {
                 //Malformed Bnumber
-                cout << "Failure: Malformed CRN " << inputArgs.at(1) << endl;
+                cout << "Input Error: invalid CRN " << inputArgs.at(1) << endl;
             }
         }
         else if(inputArgs.at(0) == "schedule")
         {
             if((int)inputArgs.size() != 2)
             {
-                cout << "Failure: too many or too few arguments" << endl;
+                cout << "Fail: too many or too few arguments" << endl;
             }
             if(regex_match(inputOuterWhitespaceChecked, scheduleCheck))
             {
@@ -309,25 +323,25 @@ int main()
                     cout << "Fail: student " << inputArgs.at(1) << " doesn't exists" << endl;
                 }
                 else{
-                    cout << "Success: schedule of student " << inputArgs.at(1) << endl;    
+                    Student* tempStudent = allStudents.searchStudent(inputArgs.at(1));
+                    cout << "Student: " << inputArgs.at(1) << ": " << tempStudent->GetName() <<endl;    
                     allStudents.printStudentSchedule(inputArgs.at(1)); 
                 } 
             }
             else if(!regex_match(inputArgs.at(1), regex("B[0-9]{8}")))
             {
                 //Malformed Bnumber
-                cout << "Failure: Malformed Bnumber " << inputArgs.at(1) << endl;
+                cout << "Input Error: invalid Bnumber " << inputArgs.at(1) << endl;
                 //continue;
             }
         }
         else if(inputArgs.at(0) == " ")
         {
             cout << endl << ": ";
-            
         }
         else
         {
-            cout << "Failure: Command not recognized" << endl;
+            cout << "Fail: Command not recognized" << endl;
         }
         
         //Clear all tokens out of vector
