@@ -97,17 +97,17 @@ int main()
             else if(!regex_match(inputArgs.at(1), regex("\\d{6}")))
             {
                 //Malformed crn
-                cout << "Input Error: illegal CRN: " << inputArgs.at(1) << endl;
+                cout << "Input Error: illegal CRN"  << endl;
             }
             else if(!regex_match(inputArgs.at(2), regex("[A-Z]{2,4}")))
             {
                 //Malformed department
-                cout << "Input Error: illegal department: " << inputArgs.at(2) << endl;
+                cout << "Input Error: illegal department" << endl;
             }
             else if(!regex_match(inputArgs.at(3), regex("[100-700]{3}")))
             {
                 //Malformed course number
-                cout << "Input Error: illegal course number: " << inputArgs.at(3) << endl;
+                cout << "Input Error: illegal course number" << endl;
             }
             else if(!regex_match(inputArgs.at(4), regex("[a-zA-Z0-9]+( [a-zA-Z0-9_]+)*")))
             {
@@ -195,9 +195,14 @@ int main()
         }
         else if(inputArgs.at(0) == "add")
         {
-            if((int)inputArgs.size() != 3)
+            if((int)inputArgs.size() < 3)
             {
-                cout << "Fail: too many or too few arguments" << endl;
+                cout << "Fail: too few arguments" << endl;
+            }
+            else if((int)inputArgs.size() > 3)
+            {
+                cout << "Warning: ignoring extra argument(s)" << endl;
+                inputOuterWhitespaceChecked = inputArgs.at(0) + " " + inputArgs.at(1) + " " + inputArgs.at(2);
             }
             if(regex_match(inputOuterWhitespaceChecked, addCheck))
             {
@@ -240,11 +245,15 @@ int main()
         }
         else if(inputArgs.at(0) == "drop")
         {
-            if((int)inputArgs.size() != 3)
+            if((int)inputArgs.size() < 3)
             {
-                cout << "Fail: too many or too few arguments" << endl;
+                cout << "Fail: too few arguments" << endl;
             }
-
+            else if((int)inputArgs.size() > 3)
+            {
+                cout << "Warning: ignoring extra argument(s)" << endl;
+                inputOuterWhitespaceChecked = inputArgs.at(0) + " " + inputArgs.at(1) + " " + inputArgs.at(2);
+            }
             if(regex_match(inputOuterWhitespaceChecked, dropCheck))
             {
                 Student* tempOldStudent = allStudents.searchStudent(inputArgs.at(1));
@@ -286,9 +295,14 @@ int main()
         }
         else if(inputArgs.at(0) == "roster")
         {
-            if((int)inputArgs.size() != 2)
+            if((int)inputArgs.size() < 2)
             {
-                cout << "Fail: too many or too few arguments" << endl;
+                cout << "Fail: too few arguments" << endl;
+            }
+            else if((int)inputArgs.size() > 2)
+            {
+                cout << "Warning: ignoring extra argument(s)" << endl;
+                inputOuterWhitespaceChecked = inputArgs.at(0) + " " + inputArgs.at(1);
             }
             if(regex_match(inputOuterWhitespaceChecked, rosterCheck))
             {
@@ -311,9 +325,14 @@ int main()
         }
         else if(inputArgs.at(0) == "schedule")
         {
-            if((int)inputArgs.size() != 2)
+            if((int)inputArgs.size() < 2)
             {
-                cout << "Fail: too many or too few arguments" << endl;
+                cout << "Fail: too few arguments" << endl;
+            }
+            else if((int)inputArgs.size() > 2)
+            {
+                cout << "Warning: ignoring extra argument(s)" << endl;
+                inputOuterWhitespaceChecked = inputArgs.at(0) + " " + inputArgs.at(1);
             }
             if(regex_match(inputOuterWhitespaceChecked, scheduleCheck))
             {
